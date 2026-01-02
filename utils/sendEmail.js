@@ -1,0 +1,27 @@
+import nodemailer from "nodemailer";
+
+const sendMail = async ({ name, email, message }) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
+    to: process.env.EMAIL_USER, // your email
+    subject: "New Contact Form Message",
+    html: `
+      <h3>New Message from Portfolio</h3>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Message:</strong><br/>${message}</p>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+export default sendMail;
